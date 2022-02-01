@@ -4,17 +4,18 @@
 //
 //  Created by Rita on 29.01.2022.
 //
+//https://api.github.com/users/USERNAME
 
 import UIKit
 import SnapKit
 
 class ViewController: UIViewController {
     
-    var tableView = UITableView()
-    var users = [User]()
-    let networkManager = NetworkManager()
-    let myRefreshControl = UIRefreshControl()
-    let url = "https://api.github.com/users"
+    private var tableView = UITableView()
+    private var users = [User]()
+    private let networkManager = NetworkManager()
+    private let myRefreshControl = UIRefreshControl()
+    private let url = "https://api.github.com/users"
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,7 +29,6 @@ class ViewController: UIViewController {
         fetchData(url: url)
         sender.endRefreshing()
     }
-    
     
     func fetchData(url: String) {
         networkManager.fetchData(url: url) { (answers) in
@@ -46,6 +46,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(TableViewCell.self, forCellReuseIdentifier: TableViewCell.identifierCell)
+        title = "GitHub Users"
         
         view.addSubview(tableView)
         tableView.snp.makeConstraints { (make) in
@@ -70,4 +71,9 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         return 100
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let user = users[indexPath.row]
+        let userDetailsViewController = UserDetailsViewController(currentUser: user)
+        navigationController?.pushViewController(userDetailsViewController, animated: true)
+    }
 }

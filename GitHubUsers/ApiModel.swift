@@ -7,10 +7,6 @@
 
 import Foundation
 
-//struct ApiModel: Decodable {
-//    let users: [User]
-//}
-
 struct User: Decodable {
     let login: String
     let id: Int
