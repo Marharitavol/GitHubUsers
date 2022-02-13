@@ -4,7 +4,6 @@
 //
 //  Created by Rita on 29.01.2022.
 //
-//https://api.github.com/users/USERNAME
 
 import UIKit
 import SnapKit
@@ -13,26 +12,26 @@ class ViewController: UIViewController {
     
     private var tableView = UITableView()
     private var users = [User]()
-    private let networkManager = NetworkManager()
+    private let dataFetcherService = DataFetcherService()
     private let myRefreshControl = UIRefreshControl()
-    private let url = "https://api.github.com/users"
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        fetchData(url: url)
+        fetchData()
         setupScreen()
         myRefreshControl.addTarget(self, action: #selector(refresh(sender:)), for: .valueChanged)
         tableView.refreshControl = myRefreshControl
     }
     
     @objc private func refresh(sender: UIRefreshControl) {
-        fetchData(url: url)
+        fetchData()
         sender.endRefreshing()
     }
     
-    func fetchData(url: String) {
-        networkManager.fetchData(url: url) { (answers) in
-            self.users = answers
+    func fetchData() {
+        dataFetcherService.fetchData { (answers) in
+            guard let answer = answers else { return }
+            self.users = answer
             DispatchQueue.main.async {
                 self.tableView.reloadData()
             }

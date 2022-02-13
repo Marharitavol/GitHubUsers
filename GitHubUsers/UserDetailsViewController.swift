@@ -17,9 +17,10 @@ class UserDetailsViewController: UIViewController {
     private let userOrganization = UILabel()
     private let userFollowingCount = UILabel()
     private let userFollowersCount = UILabel()
-    private let networkManager = NetworkManager()
+    //    private let networkManager = NetworkManager()
     private let currentUser: User
     private var userDetail: UserDetail?
+    private let dataFetcherService = DataFetcherService()
     
     init(currentUser: User) {
         self.currentUser = currentUser
@@ -40,8 +41,7 @@ class UserDetailsViewController: UIViewController {
     
     
     func getUser() {
-        let url = "https://api.github.com/users/\(currentUser.login)"
-        networkManager.fetchUserDetails(url: url) { (answer) in
+        dataFetcherService.fetchUserDetails(user: currentUser) { (answer) in
             self.userDetail = answer
             DispatchQueue.main.async {
                 self.setupInfo()
